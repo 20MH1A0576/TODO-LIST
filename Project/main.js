@@ -16,20 +16,26 @@ window.addEventListener('load', () => {
     newTodoForm.addEventListener('submit', e => {
         e.preventDefault();
 
-        const todo = {
-            content: e.target.elements.content.value,
-            category: e.target.elements.category.value,
-            done: false,
-            createdAt: new Date().getTime()
+        const todoContent = e.target.elements.content.value.trim();
+
+        if (todoContent !== '') {
+            const todo = {
+                content: todoContent,
+                category: e.target.elements.category.value,
+                done: false,
+                createdAt: new Date().getTime()
+            }
+
+            todos.push(todo);
+
+            localStorage.setItem('todos', JSON.stringify(todos));
+
+            e.target.reset();
+
+            DisplayTodos();
+        } else {
+            alert("Please Enter a task before adding it.");
         }
-
-        todos.push(todo);
-
-        localStorage.setItem('todos', JSON.stringify(todos));
-
-        e.target.reset();
-
-        DisplayTodos();
     })
 
     filterOption.addEventListener('change', () => {
@@ -47,11 +53,12 @@ window.addEventListener('load', () => {
             } else if (filterValue === "incompleted") {
                 return todo.done === false;
             } else {
-                return true; // "All" option selected, so show all tasks
+                return true; 
             }
         });
 
         filteredTodos.forEach((todo) => {
+
             const todoItem = document.createElement('div');
             todoItem.classList.add('todo-item');
 
